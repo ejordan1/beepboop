@@ -6,7 +6,7 @@ $(function(){
         // $("input#userInput").text("");
         // var output = compute(userInput);
         // $("#results").text(output);
-        $("#results").text(compute(userInput));
+        //$("#results").text(compute(userInput));
         computerOperate(userInput);
       });
 });
@@ -83,7 +83,6 @@ function timeCompute(input, i){
   }, getTimeFromHeat(heat, maxHeat, i));
 }
 
-
 var power = 0;
 var heat = 0;
 var sMult;
@@ -128,7 +127,6 @@ function ranOutOfPower(){
   $("#computerPower").text(power);
   $("#computerHeat").text(heat);
   $("#messageToUser").text("Hey, you ran me out of power! Oh well! At least I get to cool off.");
-
 }
 
 function inputRanOut(){
