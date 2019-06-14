@@ -26,8 +26,8 @@ function compute(userString){
         } else {
           valuesStored.push(i);
         }
+          console.log("heat: " + heat + ", power: " + power);
       }
-        console.log("heat: " + heat);
         return valuesStored.join(", ");
     } else {
       console.log("player won! heat: " + heat);
@@ -48,6 +48,10 @@ function containsStr(str, num){
 }
 
 ////////////////// game stuff
+
+function computeWithTime(userString, i){
+  setTimeout
+}
 
 var power;
 var heat = 0;

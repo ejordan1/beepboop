@@ -44,6 +44,9 @@ step1: while loop, click submit, returns string until case is met.
 
 
 
+next step: map out how timing will work
+
+
 
 
 */
