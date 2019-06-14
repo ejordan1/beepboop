@@ -3,9 +3,10 @@ $(function(){
         event.preventDefault();
         var userInput = $("input#userInput").val();
         //reset user input
-        $("input#userInput").text("");
-        var output = compute(userInput);
-        $("#results").text(output);
+        // $("input#userInput").text("");
+        // var output = compute(userInput);
+        // $("#results").text(output);
+        timeCompute(userInput, 0);
       });
 });
 
@@ -49,9 +50,37 @@ function containsStr(str, num){
 
 ////////////////// game stuff
 
-function computeWithTime(userString, i){
-  setTimeout
+function computerOperate(userInput){
+  stillComputing = true;
+  timeCompute(userInput, 0);
 }
+
+function timeCompute(input, i){
+  setTimeout(function(){
+      console.log("time: " + i);
+
+      if (containsStr("3", i)){
+        console.log("I'm sorry, Dave. I'm afraid I can't do that");
+        heat++;
+        $("computerTemp").text(heat);
+      } else if(containsStr("2", i)){
+        console.log("Boop");
+      } else if(containsStr("1", i)){
+        console.log("Beep");
+      } else {
+        console.log(i);
+      }
+
+      if (i < input){
+        timeCompute(input, i + 1);
+        if (playerWon()){
+          console.log("player won!")
+        }
+      }
+  }, 30);
+}
+
+
 
 var power;
 var heat = 0;
@@ -60,6 +89,7 @@ var maxHeat = 20;
 var startingPower;
 var stillComputing = false;
 
-function playerWon(heat){
-  return (heat >= maxHeat);
+function playerWon(){
+  // console.log (heat + " is heat, and max: " + maxHeat);
+  return heat > maxHeat;
 }
