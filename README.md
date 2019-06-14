@@ -12,9 +12,9 @@ _Specs:_
 _The program returns a range of numbers from 0 to the users inputted number_
   _Input: "-2"_
   _Output; "0, -1, -2"_
-_If there is a 3 contained in the inputted number, the program outputs "I'm sorry, Dave. I'm afraid I can't do that."_
+_If there is a 3 contained in the inputted number, the program outputs "I'm sorry, Dave. I'm afraid I can't do that"_
   _Input: "123"_
-  _Ouput: I'm sorry, Dave. I'm afraid I can't do that."_
+  _Ouput: I'm sorry, Dave. I'm afraid I can't do that"_
 _If there is a 2 contained in the number but not a 3, the program should output "Boop"_
   _Input: "1222"_
   _Output: "Boop"_
