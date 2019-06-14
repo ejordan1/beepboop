@@ -36,5 +36,14 @@ beep and boop just make it subtract 3 times the normal power, but still in relat
 
 function playerWon(){
 }
+*/
+
+
+/*
+step1: while loop, click submit, returns string until case is met.
+
+
+
+
 
 */

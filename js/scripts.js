@@ -1,10 +1,10 @@
 $(function(){
-  $("#beepForm").submit(function(event){
-    event.preventDefault();
-    var userInput = $("input#userInput").val();
-    var output = compute(userInput);
-    $("#resultsList").text(output);
-  });
+      $("#beepForm").submit(function(event){
+        event.preventDefault();
+        var userInput = $("input#userInput").val();
+        var output = compute(userInput);
+        $("#results").text(output);
+      });
 });
 
 function compute(userString){
@@ -12,7 +12,7 @@ function compute(userString){
   var valuesStored = [];
   for (var i = 0; i < input + 1; i++){
     if (containsStr("3", i)){
-      valuesStored.push("I'm sorry, Dave. I'm afraid I can't do that")
+      valuesStored.push("I'm sorry, Dave. I'm afraid I can't do that");
     } else if(containsStr("2", i)){
       valuesStored.push("Boop");
     } else if(containsStr("1", i)){
