@@ -1,9 +1,10 @@
 .container{
   display: grid;
   grid-template-columns: 200px 80px 400px 80px auto;
-  grid-template-rows: 150px 400px 280px 36px;
+  grid-template-rows: 150px auto 280px 36px auto;
   height: 800px;
   background-color: #f2ebd0;
+
 }
 
 .computerScreen{
@@ -26,6 +27,18 @@
   background-color: lightblue;
   text-align: center;
   font-size: 30px;
+  /* align-self: center; */
+  align-self: center;
+  z-index: 2;
+}
+
+.blueHeader{
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background-color: lightgrey;
+    font-size: 30px;
 }
 
 .keyboard{
@@ -80,4 +93,12 @@
   margin-top: 480px;
   position: fixed;
   z-index: 3;
+}
+
+#incomingNumbers{
+  align-self: center;
+  grid-column-start: 4;
+  grid-column-end: 6;
+  grid-row-start: 3;
+  grid-row-end: 4;
 }

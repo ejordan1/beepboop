@@ -1,14 +1,18 @@
 $(function(){
-      $("#beepForm").submit(function(event){
-        event.preventDefault();
-        var userInput = $("input#userInput").val();
-        //reset user input
-        // $("input#userInput").text("");
-        // var output = compute(userInput);
-        // $("#results").text(output);
-        //$("#results").text(compute(userInput));
-        computerOperate(userInput);
-      });
+  $("#computerPower").text("Power left:    " + startingPower);
+  $("#computerDisplay").text("We meet again, Dave.");
+
+  $("#beepForm").submit(function(event){
+    event.preventDefault();
+    var userInput = $("input#userInput").val();
+
+    //reset user input
+    // $("input#userInput").text("");
+    // var output = compute(userInput);
+    // $("#results").text(output);
+    //$("#results").text(compute(userInput));
+    computerOperate(userInput);
+  });
 });
 
 function compute(userString){
@@ -43,61 +47,81 @@ function containsStr(str, num){
 ////////////////// game stuff
 
 function computerOperate(userInput){
-    totalTries++;
+  totalTries++;
   //adds power
   if (!stillComputing){
-    power = 10;
+    power = startingPower;
     stillComputing = true;
-    timeCompute(userInput, 0);
+    timeCompute(userInput, 0, 0);
   } else {
     $("#computerDisplay").text("Im still computing!");
   }
 }
 
-function timeCompute(input, i){
+function timeCompute(input, i, willWaitTime){
   setTimeout(function(){
-      updatePower();
-      if (containsStr("3", i)){
-        $("#computerDisplay").text("I'm sorry, Dave. I'm afraid I can't do that");
+    var currentHeatTime = getTimeFromHeat(heat,maxHeat,i);
+    updatePower();
+    var incomingNums = getNumberStr(input, i, "");
+    incomingAnim(incomingNums, 0, currentHeatTime / timesAnimPlays);
+    if (heat < computerBreakMargin){
+        if (containsStr("3", i)){
+          setTimeout(function(){
+            $("#computerDisplay").text(regularSorryText);
+            heat++;
+          }, currentHeatTime * 1.5);
+          updateHeat();
+        } else if(containsStr("2", i)){
+          setTimeout(function(){
+              $("#computerDisplay").text("boop");
+          }, currentHeatTime  * 1.5);
+        } else if(containsStr("1", i)){
+          setTimeout(function(){
+              $("#computerDisplay").text("beep");
+          }, currentHeatTime  * 1.5);
+        } else {
+          setTimeout(function(){
+            $("#computerDisplay").text(i);
+          }, currentHeatTime  * 1.5);
+        }
+      } else {
         heat++;
-        console.log("I'm sorry, Dave. I'm afraid I can't do that");
-        updateHeat();
-      } else if(containsStr("2", i)){
-        $("#computerDisplay").text("boop");
-        console.log("boop");
-      } else if(containsStr("1", i)){
-        $("#computerDisplay").text("beep");
-        console.log("beep");
-      } else {
-        $("#computerDisplay").text(i);
+        $("#computerDisplay").text(getSorryText());
       }
-      power -= getTimeFromHeat(heat,maxHeat,i) / 1000;
-      if (playerWon()){
-        playerWins();
-        // console.log("player won!");
-        // timeCompute(input, i + 1); //keeps going forever, will crash users browser :)
-        } else if (i < input){
-          if (power > 0){
-            timeCompute(input, i + 1);
+    power -= currentHeatTime / 1000;
+    // if (playerWon()){
+    //   playerWins();
+    //   // console.log("player won!");
+    //   // timeCompute(input, i + 1); //keeps going forever, will crash users browser :)
+    // } else
 
-          } else {
-            //ran out of power
-            debugger;
-            ranOutOfPower();
-          }
+    if (i < input){
+      //cannot run out of power
+      if (power > -1000){
+        timeCompute(input, i + 1, currentHeatTime);
       } else {
-        inputRanOut();
+        //ran out of power
+        ranOutOfPower();
       }
-  }, getTimeFromHeat(heat, maxHeat, i));
+    } else {
+      inputRanOut();
+    }
+  }, willWaitTime);
 }
 
 var power = 0;
 var heat = 0;
 var sMult;
 var maxHeat = 100;
-var startingPower;
+var startingPower = 40;
 var stillComputing = false;
 var totalTries = 0;
+var incomingTotalLength = 30;
+var timesAnimPlays = 6;
+var regularSorryText = "I'm sorry, Dave. I'm afraid I can't do that";
+var sorrySplit = regularSorryText.split("");
+var sorryAdds = ["I", "m", "D", "v", "n't", "aht", "airfd", "Dav!", "%%", "&!&", "ERRR#)", "@*()", "orsy"]
+var computerBreakMargin = 60;
 
 function getTimeFromHeat(inHeat, inMaxHeat, counter){
   if (counter < 2){
@@ -118,11 +142,12 @@ function getTimeFromHeat(inHeat, inMaxHeat, counter){
   if (heat === 4){
     return 95;
   }
-  if (heat < 12){
+  if (heat < 30){
     return 80;
   }
-  var time = Math.pow(0.008212 * inHeat, 2) - (1.235 * inHeat) + 89.67;
-  return time;
+  return 65;
+  // var time = Math.pow(0.05825 * inHeat, 2) + (6.479 * inHeat) - 5;
+  // return time;
 }
 
 function playerWon(){
@@ -137,12 +162,26 @@ function ranOutOfPower(){
   updatePower();
   updateHeat();
   $("#computerDisplay").text("Hey, you ran me out of power! Oh well! At least I get to cool off.");
+  setTimeout(function(){
+    $("#incomingNumbersSpan").text("");
+  }, 50);
 }
 
 function inputRanOut(){
   stillComputing = false;
-    heat = heat / 1.5;
-    $("#computerDisplay").text("Try all you want, I'm not going to say it, Dave!");
+  heat = heat / 1.5;
+  setTimeout(function(){
+    $("#computerDisplay").text("Try all you want, Dave. I'm not gonna say it.");
+  }, 2000);
+  setTimeout(function(){
+    $("#computerDisplay").text("Try all you want, Dave. I'm not gonna say it. Dave.");
+  }, 3500);
+  setTimeout(function(){
+    $("#incomingNumbersSpan").text("");
+  }, 500);
+  setTimeout(function(){
+    $("#powerText").text(startingPower);
+  }, 1000);
 }
 
 function updateHeat(){
@@ -154,15 +193,58 @@ function updatePower(){
 }
 
 function playerWins(){
+
   power = 0;
   heat = 0;
   var threes = "";
   for (var i = 0; i < 100; i++){
     threes += "3";
   }
-  $("#computerDisplay").text(threes);
+  setTimeout(function(){
+    $("#incomingNumbersSpan").text("");
+  }, 80);
+  setTimeout(function(){
+    $("#computerDisplay").text(threes);
+  }, 80);
   setTimeout(function(){
     $("#computerDisplay").text("Well Done! It took you " + totalTries + " tries!");
     totalTries = 0;
+    stillComputing = false;
   }, 4000);
+}
+
+
+function incomingAnim(str, i, heatTime){
+  setTimeout(function(){
+    if (i > timesAnimPlays){
+      return;
+    }
+    //sets new string to substring of i
+    $("#incomingNumbersSpan").text(str.substring(i, i + incomingTotalLength));
+    incomingAnim(str, i + 1, heatTime);
+    //repeats at duratin of interval / times it will switch between new numbers
+  }, heatTime);
+}
+function getNumberStr(maxNum, currentIndex, str){
+  if (currentIndex > maxNum){
+    return str;
+  } else if (str.length >= incomingTotalLength){
+    return str;
+  }
+  var newStr = str + "]-----[" + currentIndex;
+  return getNumberStr(maxNum, currentIndex + 1, newStr);
+}
+
+function getSorryText(){
+  if  (heat < computerBreakMargin){
+    return regularSorryText;
+  } else if (heat > 100){
+    sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += 3;
+  } else {
+      if (Math.random() > .03){
+        sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += sorryAdds[Math.floor(Math.random() * (sorryAdds.length - 1))];
+      }
+    console.log(sorrySplit.join(""));
+    return sorrySplit.join("");
+  }
 }
