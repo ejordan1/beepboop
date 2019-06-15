@@ -1,7 +1,7 @@
 .container{
   display: grid;
-  grid-template-columns: auto 80px 400px 80px auto;
-  grid-template-rows: 150px auto 280px 36px;
+  grid-template-columns: 200px 80px 400px 80px auto;
+  grid-template-rows: 150px 400px 280px 36px;
   height: 800px;
   background-color: #f2ebd0;
 }
@@ -14,7 +14,8 @@
   border: 5px solid;
   background-color: #c7d6e0;
   text-align: center;
-  padding-top: 119px;
+  /* padding-top: 119px; */
+  padding-top: 80px;
 }
 
 .head{
@@ -39,9 +40,12 @@
   border: 2px solid;
 }
 
-.power{
+.power img{
   position: fixed;
+  margin-left: 220px;
+  margin-top: 470px;
   z-index: 2;
+  height: 160px;
   /* grid-column-start: 2;
   grid-column-end: 3;
   grid-row-start: 3;
@@ -49,12 +53,31 @@
   background-color: green; */
 }
 
-.heat{
+.heat img{
+  margin-left: 500px;
+  margin-top: 470px;
   position: fixed;
   z-index: 2;
+  height: 160px;
   /* grid-column-start: 4;
   grid-column-end: 5;
   grid-row-start: 3;
   grid-row-end: 4;
   background-color: red; */
+}
+
+#heatText{
+  font-style: italic;
+  margin-left: 510px;
+  margin-top: 480px;
+  position: fixed;
+  z-index: 3;
+}
+
+#powerText{
+  font-style: italic;
+  margin-left: 220px;
+  margin-top: 480px;
+  position: fixed;
+  z-index: 3;
 }

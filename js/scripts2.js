@@ -12,6 +12,8 @@ $(function(){
 });
 
 function compute(userString){
+  $("#computerPower").text(power);
+  $("#computerHeat").text(heat);
   var input = parseInt(userString);
   var valuesStored = [];
   for (var i = 0; i < input + 1; i++){
@@ -41,20 +43,25 @@ function containsStr(str, num){
 ////////////////// game stuff
 
 function computerOperate(userInput){
+    totalTries++;
   //adds power
-  power = 7;
-  stillComputing = true;
-  timeCompute(userInput, 0);
+  if (!stillComputing){
+    power = 10;
+    stillComputing = true;
+    timeCompute(userInput, 0);
+  } else {
+    $("#computerDisplay").text("Im still computing!");
+  }
 }
 
 function timeCompute(input, i){
   setTimeout(function(){
-      $("#computerPower").text(power);
+      updatePower();
       if (containsStr("3", i)){
         $("#computerDisplay").text("I'm sorry, Dave. I'm afraid I can't do that");
         heat++;
         console.log("I'm sorry, Dave. I'm afraid I can't do that");
-        $("#computerHeat").text(heat);
+        updateHeat();
       } else if(containsStr("2", i)){
         $("#computerDisplay").text("boop");
         console.log("boop");
@@ -66,8 +73,9 @@ function timeCompute(input, i){
       }
       power -= getTimeFromHeat(heat,maxHeat,i) / 1000;
       if (playerWon()){
-        console.log("player won!");
-        timeCompute(input, i + 1); //keeps going forever, will crash users browser :)
+        playerWins();
+        // console.log("player won!");
+        // timeCompute(input, i + 1); //keeps going forever, will crash users browser :)
         } else if (i < input){
           if (power > 0){
             timeCompute(input, i + 1);
@@ -89,6 +97,7 @@ var sMult;
 var maxHeat = 100;
 var startingPower;
 var stillComputing = false;
+var totalTries = 0;
 
 function getTimeFromHeat(inHeat, inMaxHeat, counter){
   if (counter < 2){
@@ -122,16 +131,38 @@ function playerWon(){
 }
 
 function ranOutOfPower(){
+  stillComputing = false;
   heat = 0;
   power = 0;
-  $("#computerPower").text(power);
-  $("#computerHeat").text(heat);
-  $("#messageToUser").text("Hey, you ran me out of power! Oh well! At least I get to cool off.");
+  updatePower();
+  updateHeat();
+  $("#computerDisplay").text("Hey, you ran me out of power! Oh well! At least I get to cool off.");
 }
 
 function inputRanOut(){
-  if (heat < 20){
-    heat = heat / 2.3;
+  stillComputing = false;
+    heat = heat / 1.5;
+    $("#computerDisplay").text("Try all you want, I'm not going to say it, Dave!");
+}
+
+function updateHeat(){
+  $("#computerHeat").text("Internal temperature:    " + Math.ceil(heat));
+}
+
+function updatePower(){
+  $("#computerPower").text("Power left:    " + Math.ceil(power));
+}
+
+function playerWins(){
+  power = 0;
+  heat = 0;
+  var threes = "";
+  for (var i = 0; i < 100; i++){
+    threes += "3";
   }
-    $("#messageToUser").text("Those were some nice calculations. But how many times am I going to have to say it! I can't! I can't! Goodness!");
+  $("#computerDisplay").text(threes);
+  setTimeout(function(){
+    $("#computerDisplay").text("Well Done! It took you " + totalTries + " tries!");
+    totalTries = 0;
+  }, 4000);
 }
