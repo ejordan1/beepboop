@@ -60,35 +60,39 @@ function computerOperate(userInput){
 
 function timeCompute(input, i, willWaitTime){
   setTimeout(function(){
+    if (i > 400){
+      playerWins();
+      return;
+    }
     var currentHeatTime = getTimeFromHeat(heat,maxHeat,i);
     updatePower();
     var incomingNums = getNumberStr(input, i, "");
     incomingAnim(incomingNums, 0, currentHeatTime / timesAnimPlays);
     if (heat < computerBreakMargin){
-        if (containsStr("3", i)){
-          setTimeout(function(){
-            $("#computerDisplay").text(regularSorryText);
-            heat++;
-          }, currentHeatTime * 1.5);
-          updateHeat();
-        } else if(containsStr("2", i)){
-          setTimeout(function(){
-              $("#computerDisplay").text("boop");
-          }, currentHeatTime  * 1.5);
-        } else if(containsStr("1", i)){
-          setTimeout(function(){
-              $("#computerDisplay").text("beep");
-          }, currentHeatTime  * 1.5);
-        } else {
-          setTimeout(function(){
-            $("#computerDisplay").text(i);
-          }, currentHeatTime  * 1.5);
-        }
+      if (containsStr("3", i)){
+        setTimeout(function(){
+          $("#computerDisplay").text(regularSorryText);
+          heat++;
+        }, currentHeatTime * 1.5);
+        updateHeat();
+      } else if(containsStr("2", i)){
+        setTimeout(function(){
+          $("#computerDisplay").text("boop");
+        }, currentHeatTime  * 1.5);
+      } else if(containsStr("1", i)){
+        setTimeout(function(){
+          $("#computerDisplay").text("beep");
+        }, currentHeatTime  * 1.5);
       } else {
-        heat++;
-        $("#computerDisplay").text(getSorryText());
+        setTimeout(function(){
+          $("#computerDisplay").text(i);
+        }, currentHeatTime  * 1.5);
       }
-    power -= currentHeatTime / 1000;
+    } else {
+      heat++;
+      $("#computerDisplay").text(getSorryText(i));
+    }
+    // power -= currentHeatTime / 1000;
     // if (playerWon()){
     //   playerWins();
     //   // console.log("player won!");
@@ -106,6 +110,10 @@ function timeCompute(input, i, willWaitTime){
     } else {
       inputRanOut();
     }
+    //clears screen before next one
+    setTimeout(function(){
+      $("#computerDisplay").text("");
+    }, (currentHeatTime  * 1.5) + currentHeatTime - 10);
   }, willWaitTime);
 }
 
@@ -127,25 +135,31 @@ function getTimeFromHeat(inHeat, inMaxHeat, counter){
   if (counter < 2){
     return 800;
   }
-  if (heat === 0){
+  if (counter < 6){
     return 500;
   }
-  if (heat === 1){
+  if (counter < 12){
     return 300;
   }
-  if (heat === 2){
+  if (counter < 20){
     return 150;
   }
-  if (heat === 3){
+  if (counter < 40){
     return 120;
   }
-  if (heat === 4){
+  if (counter < 80){
     return 95;
   }
-  if (heat < 30){
+  if (counter < 100){
     return 80;
   }
-  return 65;
+  if (counter < 150){
+    return 65;
+  }
+  if (counter < 300){
+    return 50;
+  }
+  return 40;
   // var time = Math.pow(0.05825 * inHeat, 2) + (6.479 * inHeat) - 5;
   // return time;
 }
@@ -171,14 +185,20 @@ function inputRanOut(){
   stillComputing = false;
   heat = heat / 1.5;
   setTimeout(function(){
-    $("#computerDisplay").text("Try all you want, Dave. I'm not gonna say it.");
-  }, 2000);
+    $("#computerDisplay").text("Maybe next time, Dave. Maybe next time.");
+  }, 2500);
   setTimeout(function(){
-    $("#computerDisplay").text("Try all you want, Dave. I'm not gonna say it. Dave.");
-  }, 3500);
+    $("#computerDisplay").text("...");
+  }, 5500);
+  setTimeout(function(){
+    $("#computerDisplay").text("Shall we compute again?");
+  }, 8000);
   setTimeout(function(){
     $("#incomingNumbersSpan").text("");
-  }, 500);
+  }, 100);
+  setTimeout(function(){
+    $("#incomingNumbersSpan").text("");
+  }, 1000);
   setTimeout(function(){
     $("#powerText").text(startingPower);
   }, 1000);
@@ -202,15 +222,24 @@ function playerWins(){
   }
   setTimeout(function(){
     $("#incomingNumbersSpan").text("");
-  }, 80);
+  }, 50);
   setTimeout(function(){
-    $("#computerDisplay").text(threes);
-  }, 80);
+    $("#computerDisplay").text("3");
+  }, 3000);
   setTimeout(function(){
-    $("#computerDisplay").text("Well Done! It took you " + totalTries + " tries!");
+    $("#computerDisplay").text("");
+  }, 5000);
+  setTimeout(function(){
+    $("#computerDisplay").text("Until next time, Dave");
     totalTries = 0;
     stillComputing = false;
-  }, 4000);
+  }, 7000);
+  setTimeout(function(){
+    $("#computerDisplay").text("");
+  }, 11000);
+  setTimeout(function(){
+    $("#computerDisplay").text("We meet again, Dave.");
+  }, 11100);
 }
 
 
@@ -235,16 +264,34 @@ function getNumberStr(maxNum, currentIndex, str){
   return getNumberStr(maxNum, currentIndex + 1, newStr);
 }
 
-function getSorryText(){
+function getSorryText(counter){
   if  (heat < computerBreakMargin){
     return regularSorryText;
-  } else if (heat > 100){
-    sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += 3;
   } else {
-      if (Math.random() > .03){
+    // var ran = Math.random();
+    // console.log(ran);
+    if (counter > 300){
+      if (counter < 310){
+        if (Math.random() < .1){
+          sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += sorryAdds[Math.floor(Math.random() * (sorryAdds.length - 1))];
+        }
+      } else if (counter < 350){
+        if (Math.random() < .16){
+          sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += sorryAdds[Math.floor(Math.random() * (sorryAdds.length - 1))];
+        }
+      } else if (counter < 380){
+        if (Math.random() < .5){
+          sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += sorryAdds[Math.floor(Math.random() * (sorryAdds.length - 1))];
+        }
+      } else {
         sorrySplit[Math.floor(Math.random() * sorrySplit.length)] += sorryAdds[Math.floor(Math.random() * (sorryAdds.length - 1))];
       }
+    }
     console.log(sorrySplit.join(""));
-    return sorrySplit.join("");
+    str = sorrySplit.join("");
+    if (str.length > 100){
+      str = str.substring(str.length - 90, str.length);
+    }
+    return str;
   }
 }
